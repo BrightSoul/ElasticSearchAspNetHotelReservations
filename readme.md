@@ -22,7 +22,7 @@ Demonstrated features
 ---------------------
 * Recreating an index and adding documents as a background operation which runs from a HangFire job every minute. The HangFire dashboard can be seend at /jobs;
 * Querying documents and child documents by date, price and text;
-* Queries use "must" and "should" filters;
+* Use of "must" and "should" filters dynamically added to the query, depending on which filter criteria where selected by the user;
 * Field score boosting;
 * Suggestions shown as you type text;
 * Document aggregations which will be used as filters (facets) to narrow down the results; 
@@ -33,7 +33,7 @@ Demonstrated features
 NOT implemented in this demo
 --------------------------------------
 * Search by city / geographical search;
-* Ordering/boosting by price or discout rate;
+* Ordering/boosting by price or discount rate;
 * The actual room reservation, as this demo focuses on search. Reservation entites can by added to the database by hand or via Entity Framework, though.
 
 > Please note: this code is not intended to be used in production. For instance, the ElasticSearch index is deleted and recreated every minute and that makes users wait until then. This is, of course, far from ideal. Consider updating documents in response to domain events, instead.
