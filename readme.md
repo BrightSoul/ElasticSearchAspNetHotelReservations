@@ -36,7 +36,7 @@ NOT implemented in this demo
 * Ordering/boosting by price or discout rate;
 * The actual room reservation, as this demo focuses on search. Reservation entites can by added to the database by hand or via Entity Framework, though.
 
-> Please note: this code is not intended to be used in production. For instance, the ElasticSearch index is deleted and recreated every minute and makes users wait until then. This is, of course, far from ideal. Consider updating documents in response to domain events, instead.
+> Please note: this code is not intended to be used in production. For instance, the ElasticSearch index is deleted and recreated every minute and that makes users wait until then. This is, of course, far from ideal. Consider updating documents in response to domain events, instead.
 
 Preview
 -------
