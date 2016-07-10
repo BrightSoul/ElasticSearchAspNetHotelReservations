@@ -6,23 +6,23 @@ This demo focuses on the usage of the [NEST client](https://www.elastic.co/guide
 
 Use case
 --------
-As a user, you will select the date and number of nights you'll like to stay. The first 10 results orderer by user rating will be shown on the right with the option of loading more by clicking a button at the end of the list.
-Then, you will be presented with more filter options, such as services offered, number of people who're going to stay, bed types and hotel names. Results order are highly influenced by user rating (most liked will be at the top).
+As a user, you will select the date and number of nights you'd like to stay. The first 10 results are orderer by user rating and they will be shown on the right, with the option of loading more by clicking a button at the end of the list.
+You will be presented with more filter options, such as services offered, number of people who're going to stay, bed types and hotel names. Order of results is highly influenced by user rating (the most liked will be at the top).
 
-Rooms that can't accomodate you for the number of nights you selected won't be shown in the results.
+Rooms that can't accomodate you for the number of nights you selected won't be appear in the results.
 
 > You can start right away: some dummy data (rooms and reservations) is automatically added for you at the application startup, so you'll see results for any date you select (select the present day, for instance). There are a total of 14 rooms in 2 hotels with 10 reservations distributed among them. Please check the [Seed method](https://github.com/BrightSoul/ElasticSearchAspNetHotelReservations/blob/master/AspNetElasticSearchDemo/Services/HotelReservationInitializer.cs#L14) of the Entity Framework initializer to see that data and suit it to your needs.
 
 Requirements
 ------------
-This is an ASP.NET MVC 5 project created on Visual Studio 2015. To run this demo, you'll need ElastcSearch 2.x listening on the default port (9200) and an instance of Sql Server.
-Please check the web.config file to ensure the connection string is valid on your machine.
+This is an ASP.NET MVC 5 project created on Visual Studio 2015. To make this demo work, you'll need ElastcSearch 2.x listening on the default port (9200) and an instance of Sql Server.
+Please check the web.config file to ensure the connection string is valid for your machine.
 
 Demonstrated features
 ---------------------
-* Recreating an index and adding documents as a background operation which runs from a HangFire job every minute. The HangFire dashboard can be seend at /jobs;
+* Recreating an index and adding documents as a background job which is run by HangFire every minute. Its dashboard can be seen at /jobs;
 * Querying documents and child documents by date, price and text;
-* Use of "must" and "should" filters dynamically added to the query, depending on which filter criteria where selected by the user;
+* Use of "must" and "should" filters, which are dynamically added to the query depending on which filter criteria was selected by the user;
 * Field score boosting;
 * Suggestions shown as you type text;
 * Document aggregations which will be used as filters (facets) to narrow down the results; 
