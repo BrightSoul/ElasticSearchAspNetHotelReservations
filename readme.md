@@ -11,7 +11,7 @@ Then, you will be presented with more filter options, such as services offered, 
 
 Rooms that can't accomodate you for the number of nights you selected won't be shown in the results.
 
-> Start right away: some dummy data (rooms and reservations) is automatically added for you at the application startup, so you'll see results for any date you select. There are a total of 14 rooms in 2 hotels with 10 reservations distributed among them. Please check the Seed method of the Entity Framework initializer to see that data and suit it to your needs.
+> You can start right away: some dummy data (rooms and reservations) is automatically added for you at the application startup, so you'll see results for any date you select (select the present day, for instance). There are a total of 14 rooms in 2 hotels with 10 reservations distributed among them. Please check the [Seed method](https://github.com/BrightSoul/ElasticSearchAspNetHotelReservations/blob/master/AspNetElasticSearchDemo/Services/HotelReservationInitializer.cs#L14) of the Entity Framework initializer to see that data and suit it to your needs.
 
 Requirements
 ------------
