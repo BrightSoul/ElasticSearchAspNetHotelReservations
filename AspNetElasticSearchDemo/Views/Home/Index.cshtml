@@ -1,0 +1,228 @@
+﻿@{
+    ViewBag.Title = "Home Page";
+}
+
+<style>
+    .price::before {
+        content:'€'
+    }
+    .price::after {
+        content: '.00';
+        font-size: 19px;
+    }
+</style>
+<div class="row" id="searchpage">
+    <div class="col-md-4">
+        <h2>Search</h2>
+       
+        <div class="panel panel-default">
+            <div class="panel-heading">plan your stay</div>
+            <div class="panel-body">
+                <div class="form-group">
+                    <label for="email">Date of arrival</label>
+                    <input type="date" class="form-control" data-bind="value: filters.arrival" placeholder="yyyy/mm/dd" />
+                </div>
+                <div class="form-group">
+                    <label for="email">Nights</label>
+                    <select data-bind="value: filters.nights" class="form-control">
+                        <option>1</option>
+                        <option>2</option>
+                        <option>3</option>
+                        <option>4</option>
+                        <option>5</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+
+
+        <div data-bind="if: result()">
+
+
+            <div class="panel panel-default">
+                <div class="panel-heading">hotelOrRoomName</div>
+                <div class="panel-body" style="position:relative;">
+                    <input id="text" class="form-control" data-bind="value: filters.text, valueUpdate: 'afterkeydown', event:{ blur: $root.clearSuggestions }" placeholder="eg. Double" />
+                    <div style="position:absolute; top:48px;" data-bind="if: suggestions().length">
+                        <ul class="list-unstyled" data-bind="foreach: suggestions" style="border:1px solid gray; background:white; padding:10px;">
+                            <h5 data-bind="text: Suggestion" style="margin:0; padding:0;"></h5>
+                                <ul data-bind="foreach: Terms" class="list-unstyled">
+                                    <li><a href="#" class="btn btn-link" data-bind="click: $root.selectSuggestion, text: $data"></a></li>
+                                </ul>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="panel panel-default">
+                <div class="panel-heading">maxPrice</div>
+                <div class="panel-body">
+                    <input type="range" data-bind="value: filters.maxPrice" data-slider-id="maxPriceSlider" min="0" max="200" value="200" step="10" />
+                    <span data-bind="text: filters.maxPrice" class="pull-right" style="font-size:16px;"></span>
+                    </div>
+            </div>
+
+                <ul class="list-unstyled" data-bind="foreach: result().Aggregations">
+                    <li data-bind="if: Terms.length">
+                        <div class="panel panel-default">
+                            <div class="panel-heading"><span data-bind="text: Aggregation"></span><a href="#" data-bind="click: $root.clearAggregation, visible: canBeCleared" class="pull-right">Clear filter</a></div>
+                            <div class="panel-body">
+                                <ul class="list-unstyled" data-bind="foreach: Terms">
+                                    <li><input type="checkbox" data-bind="attr: { id: key, name: key}, checked: selected, click: $root.handleTerm" /> <label data-bind="text: Term, attr: { for: key }"></label> (<span data-bind="text: DocumentCount"></span>)</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+            <div data-bind="if: !result()">
+                <h3 style="opacity: 0.3; text-align:center;">Filters will be displayed here</h3>
+            </div>
+        </div>
+    <div class="col-md-8">
+        
+        <div data-bind="if: !result()">
+            <h2>Results</h2>
+            <h3 style="opacity: 0.3">Results will be displayed here</h3>
+        </div>
+        <div data-bind="if: result()">
+            <h2>Results (<span data-bind="text: result().TotalResults"></span>)<span class="pull-right" style="opacity: 0.4; font-size:12px;"><span data-bind="text: 'Request took: '+result().RequestDuration+' ms'"></span>; <span data-bind="text: 'ElasticSearch took: '+result().QueryDuration+'ms'"></span>.</span></h2>
+            <div data-bind="if: !(result().TotalResults)" style="margin-top:40px;">
+                <a href="/" class="btn btn-primary">No result found, please reload the page</a>
+            </div>
+            <div data-bind="if: result().TotalResults">
+                <ul data-bind="foreach: result().Hits" class="list-unstyled">
+                    <li>
+                        <div class="panel panel-primary">
+                            <div class="panel-heading"><h3 style="padding:0; margin:0"><span data-bind="text: Room.HotelName" class="label label-info" style="margin-right:10px; position:relative; top:-2px;"></span><span data-bind="text: Room.RoomName"></span><span data-bind="text: 'Score: ' + Score" style="opacity: 0.4;" class="pull-right"></span></h3></div>
+                            <div class="panel-body" data-bind="with: Room">
+                                <div>
+                                    <img data-bind="attr: { src: '/Content/rooms/' + Image + '.jpg'}" style="vertical-align:top;" />
+                                    <span style="background: #efefef; height: 90px; display: inline-block; width: 90px; text-transform: uppercase; font-size: 11px; text-align: center; padding-top: 10px;">User rating<label data-bind="text: Rating" style="font-size:30px;"></label></span>
+                                    <span class="pull-right price" style="font-size:40px;" data-bind="text: Price"></span>
+
+                                </div>
+                                <div style="border-top:1px dashed #ccc; margin-top:10px; padding-top:5px;">
+                                    <span class="label label-info">Beds</span>
+                                    <ul data-bind="foreach: BedTypes" class="list-unstyled list-inline" style="display:inline-block; width: 100px;">
+                                        <li style="margin:0; padding:0"><img data-bind="attr: { src: '/Content/beds/' + $data + '.png', alt: $data, title: $data }" /></li>
+                                    </ul>
+                                    <span class="label label-info">Room services</span>
+                                    <ul data-bind="foreach: Services" class="list-unstyled list-inline" style="display:inline">
+                                        <li><img data-bind="attr: { src: '/Content/services/' + $data + '.png', alt: $data, title: $data }" /></li>
+                                    </ul>
+                                    <button type="button" class="btn btn-success pull-right" data-bind="click: $root.reserve">
+                                        Reserve now
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+                <div style="text-align:center;" data-bind="visible: result().TotalResults > result().LoadedResults()">
+                    <button type="button" data-bind="click: $root.loadMore" class="btn btn-default">Load more results</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+</div>
+@section Scripts {
+<script>
+    function SearchViewModel() {
+        var self = this;
+
+        self.filters = {
+            arrival: ko.observable(null),
+            nights: ko.observable(1),
+            text: ko.observable(""),
+            maxPrice: ko.observable(170),
+            terms: ko.observableArray([])
+        };
+        self.suggestions = ko.observableArray([]);
+        self.result = ko.observable(null);
+        self.suggest = ko.computed(function () {
+            var text = self.filters.text();
+            if (!text) {
+                self.suggestions([]);
+                return;
+            }
+            $.post("@Url.Action("Suggest")", { text: text })
+            .success(function (data) {
+                self.suggestions(data.Suggestions);
+            });
+        });
+        self.sendRequest = function (data, offset, callback) {
+            data.offset = offset;
+            $.post("@Url.Action("Search")", data)
+            .success(function (result) {
+                var selectedTerms = self.filters.terms();
+                //Check if any of the aggregation terms are selected
+                if (result.Aggregations){
+                    for (var r = 0; r < result.Aggregations.length; r++) {
+                        let aggregation = result.Aggregations[r];
+                        aggregation.key = aggregation.Aggregation + "_";
+                        aggregation.canBeCleared = false;
+                        for (var t = 0; t < aggregation.Terms.length; t++) {
+                            let term = aggregation.Terms[t];
+                            term.key = aggregation.key + term.Term;
+                            term.selected = ko.observable(selectedTerms.indexOf(term.key) > -1);
+                            aggregation.canBeCleared |= term.selected();
+                        }
+                        aggregation.Terms.sort(function (a, b) { return a.Term - b.Term });
+
+                    }
+                }
+                console.log("Result: ", result);
+                callback(result);
+            })
+        };
+        self.search = ko.computed(function () {
+            if (!self.filters.nights() || !self.filters.arrival())
+                return;
+            self.sendRequest(ko.toJS(self.filters), 0, function (result) {
+                result.LoadedResults = ko.observable(result.Hits.length);
+                result.Hits = ko.observableArray(result.Hits);
+
+                self.result(result);
+            });
+        });
+        self.reserve = function () {
+            alert("Not implemented");
+        };
+        self.clearAggregation = function (aggregation) {
+            var selectedTerms = self.filters.terms();
+            var newTerms = selectedTerms.filter(function (term) { return term.substr(0, aggregation.key.length) != aggregation.key });
+            self.filters.terms(newTerms);
+        };
+        self.handleTerm = function (term, evt) {
+            if (evt.currentTarget.checked) {
+                self.filters.terms.push(term.key);
+            } else {
+                self.filters.terms.remove(term.key);
+            }
+        };
+        self.loadMore = function () {
+            self.sendRequest(ko.toJS(self.filters), self.result().LoadedResults(), function(result) {
+                var hits = self.result().Hits;
+                for (var i = 0; i<result.Hits.length; i++) {
+                    hits.push(result.Hits[i]);
+                }
+                self.result().LoadedResults(self.result().LoadedResults() + result.Hits.length);
+
+            });
+        };
+        self.selectSuggestion = function (text) {
+            self.filters.text(text);
+        };
+        self.clearSuggestions = function () {
+            setTimeout(function () {
+                self.suggestions([]);
+            }, 100);
+        };
+    }
+    var viewModel = new SearchViewModel();
+    ko.applyBindings(viewModel);
+</script>
+}
